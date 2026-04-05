@@ -129,6 +129,16 @@ export default function EasterBettingPool() {
     });
   };
 
+  const resetApp = () => {
+    setPhase(PHASES.SETUP);
+    setHunters(["", "", ""]);
+    setBuyIn("");
+    setBettors([]);
+    setCurrentBet({ name: "", firstDuck: "", firstEgg: "", winner: "", winningCount: "", losingCount: "" });
+    setResults({ firstDuck: "", firstEgg: "", winner: "", winningCount: "", losingCount: "" });
+    setShowScores(false);
+  };
+
   const scoreResults = () => {
     return bettors.map((b) => {
       let score = 0;
@@ -398,6 +408,7 @@ export default function EasterBettingPool() {
         {fontLink}
         {decorativeEggs}
         <div style={headerStyle}>
+          <button onClick={resetApp} style={{ ...dangerBtn, position: "absolute", top: 16, right: 16 }}>↺ Reset</button>
           <p style={titleStyle}>
             <span role="img">🎰</span> Place Your Bets!
           </p>
@@ -542,6 +553,7 @@ export default function EasterBettingPool() {
         {fontLink}
         {decorativeEggs}
         <div style={headerStyle}>
+          <button onClick={resetApp} style={{ ...dangerBtn, position: "absolute", top: 16, right: 16 }}>↺ Reset</button>
           <p style={titleStyle}><span role="img">📋</span> All Bets</p>
           <p style={subtitleStyle}>{bettors.length} total bets · Pot: ${bettors.length * Number(buyIn)}</p>
         </div>
@@ -598,6 +610,7 @@ export default function EasterBettingPool() {
         {fontLink}
         {decorativeEggs}
         <div style={headerStyle}>
+          <button onClick={resetApp} style={{ ...dangerBtn, position: "absolute", top: 16, right: 16 }}>↺ Reset</button>
           <p style={titleStyle}><span role="img">🏁</span> Results</p>
           <p style={subtitleStyle}>Enter what actually happened!</p>
         </div>
