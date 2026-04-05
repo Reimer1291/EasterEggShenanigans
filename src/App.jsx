@@ -73,7 +73,7 @@ function ChipButton({ selected, onClick, children, colorInfo, style: extraStyle 
 
 export default function EasterBettingPool() {
   const [phase, setPhase] = useState(PHASES.SETUP);
-  const [hunters, setHunters] = useState(["", "", ""]);
+  const [hunters, setHunters] = useState(["", ""]);
   const [buyIn, setBuyIn] = useState("");
   const [bettors, setBettors] = useState([]);
   const [currentBet, setCurrentBet] = useState({
@@ -97,7 +97,7 @@ export default function EasterBettingPool() {
     if (hunters.length < 5) setHunters([...hunters, ""]);
   };
   const removeHunter = (i) => {
-    if (hunters.length > 3) setHunters(hunters.filter((_, idx) => idx !== i));
+    if (hunters.length > 2) setHunters(hunters.filter((_, idx) => idx !== i));
   };
   const updateHunter = (i, v) => {
     const h = [...hunters];
@@ -106,7 +106,7 @@ export default function EasterBettingPool() {
   };
 
   const validHunters = hunters.filter((h) => h.trim());
-  const canStartBetting = validHunters.length >= 3 && Number(buyIn) > 0;
+  const canStartBetting = validHunters.length >= 2 && Number(buyIn) > 0;
 
   const submitBet = () => {
     if (
@@ -131,7 +131,7 @@ export default function EasterBettingPool() {
 
   const resetApp = () => {
     setPhase(PHASES.SETUP);
-    setHunters(["", "", ""]);
+    setHunters(["", ""]);
     setBuyIn("");
     setBettors([]);
     setCurrentBet({ name: "", firstDuck: "", firstEgg: "", winner: "", winningCount: "", losingCount: "" });
