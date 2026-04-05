@@ -337,6 +337,23 @@ export default function EasterBettingPool() {
         </div>
         {infoBar}
         <div style={cardStyle}>
+          <p style={{ ...labelStyle, fontSize: "1.05rem", marginBottom: 12 }}><span role="img">🎯</span> Betting Categories &amp; Scoring</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { emoji: "🦆", label: "First Duck Color Found", pts: `${BASE_PTS} pts` },
+              { emoji: "🥚", label: "First Egg Color Found", pts: `${Math.min(...Object.values(EGG_POINTS))}–${Math.max(...Object.values(EGG_POINTS))} pts (rarer = more)` },
+              { emoji: "🏆", label: "Hunter with Most Eggs", pts: `${BASE_PTS} pts` },
+              { emoji: "📈", label: "Winning Egg Count", pts: `${BASE_PTS} pts exact · 1 pt within ±2` },
+              { emoji: "📉", label: "Losing Egg Count", pts: `${BASE_PTS} pts exact · 1 pt within ±2` },
+            ].map(({ emoji, label, pts }) => (
+              <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 10px", background: "rgba(255,255,255,0.4)", borderRadius: 10 }}>
+                <span style={{ fontSize: "0.88rem", color: "#2d3436" }}><span role="img">{emoji}</span> {label}</span>
+                <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#6c5ce7", whiteSpace: "nowrap", marginLeft: 8 }}>{pts}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={cardStyle}>
           <p style={{ ...labelStyle, fontSize: "1.05rem", marginBottom: 14 }}>
             <span role="img">🏃</span> Egg Hunters ({hunters.length})
           </p>
