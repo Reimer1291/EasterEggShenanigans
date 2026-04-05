@@ -93,11 +93,9 @@ export default function EasterBettingPool() {
   });
   const [showScores, setShowScores] = useState(false);
 
-  const addHunter = () => {
-    if (hunters.length < 5) setHunters([...hunters, ""]);
-  };
+  const addHunter = () => setHunters([...hunters, ""]);
   const removeHunter = (i) => {
-    if (hunters.length > 2) setHunters(hunters.filter((_, idx) => idx !== i));
+    if (hunters.length > 1) setHunters(hunters.filter((_, idx) => idx !== i));
   };
   const updateHunter = (i, v) => {
     const h = [...hunters];
@@ -340,7 +338,7 @@ export default function EasterBettingPool() {
         {infoBar}
         <div style={cardStyle}>
           <p style={{ ...labelStyle, fontSize: "1.05rem", marginBottom: 14 }}>
-            <span role="img">🏃</span> Egg Hunters ({hunters.length}/5)
+            <span role="img">🏃</span> Egg Hunters ({hunters.length})
           </p>
           {hunters.map((h, i) => (
             <div key={i} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
@@ -353,22 +351,18 @@ export default function EasterBettingPool() {
                 value={h}
                 onChange={(e) => updateHunter(i, e.target.value)}
               />
-              {hunters.length > 3 && (
-                <button
-                  onClick={() => removeHunter(i)}
-                  style={{ background: "none", border: "none", color: "#d63031", cursor: "pointer", fontSize: "1.2rem", fontWeight: 700, padding: "4px 8px" }}
-                >
-                  ×
-                </button>
-              )}
+              <button
+                onClick={() => removeHunter(i)}
+                style={{ background: "none", border: "none", color: "#d63031", cursor: "pointer", fontSize: "1.2rem", fontWeight: 700, padding: "4px 8px", opacity: hunters.length > 1 ? 1 : 0.3 }}
+              >
+                ×
+              </button>
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
-            {hunters.length < 5 && (
-              <button onClick={addHunter} style={{ ...primaryBtn, background: "rgba(108,92,231,0.12)", color: "#6c5ce7", boxShadow: "none", fontSize: "0.9rem", padding: "8px 20px" }}>
-                + Add Hunter
-              </button>
-            )}
+            <button onClick={addHunter} style={{ ...primaryBtn, background: "rgba(108,92,231,0.12)", color: "#6c5ce7", boxShadow: "none", fontSize: "0.9rem", padding: "8px 20px" }}>
+              + Add Hunter
+            </button>
           </div>
           <div style={{ marginTop: 20, borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 18 }}>
             <p style={{ ...labelStyle, fontSize: "1.05rem", marginBottom: 10 }}>
