@@ -532,11 +532,15 @@ export default function EasterBettingPool() {
                 }}
               >
                 <span style={{ fontWeight: 600 }}>{b.name}</span>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end", alignItems: "center" }}>
                   <span style={{ fontSize: "0.75rem", background: COLOR_MAP[b.firstDuck].bg, color: COLOR_MAP[b.firstDuck].text, padding: "2px 8px", borderRadius: 99 }}>{b.firstDuck}</span>
                   <span style={{ fontSize: "0.75rem", background: COLOR_MAP[b.firstEgg].bg, color: COLOR_MAP[b.firstEgg].text, padding: "2px 8px", borderRadius: 99 }}>{b.firstEgg}</span>
                   <span style={{ fontSize: "0.75rem", background: "#dfe6e9", padding: "2px 8px", borderRadius: 99 }}>{b.winner}</span>
                   <span style={{ fontSize: "0.75rem", background: "#dfe6e9", padding: "2px 8px", borderRadius: 99 }}>W:{b.winningCount} L:{b.losingCount}</span>
+                  <button
+                    onClick={() => setBettors(bettors.filter((_, idx) => idx !== i))}
+                    style={{ background: "none", border: "none", color: "#d63031", cursor: "pointer", fontSize: "1.2rem", fontWeight: 700, padding: "2px 6px", lineHeight: 1 }}
+                  >×</button>
                 </div>
               </div>
             ))}
