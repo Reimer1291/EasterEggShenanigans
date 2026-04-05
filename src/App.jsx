@@ -73,7 +73,7 @@ function ChipButton({ selected, onClick, children, colorInfo, style: extraStyle 
 
 export default function EasterBettingPool() {
   const [phase, setPhase] = useState(PHASES.SETUP);
-  const [hunters, setHunters] = useState(["", "", ""]);
+  const [hunters, setHunters] = useState(["", ""]);
   const [buyIn, setBuyIn] = useState("");
   const [bettors, setBettors] = useState([]);
   const [currentBet, setCurrentBet] = useState({
@@ -93,11 +93,9 @@ export default function EasterBettingPool() {
   });
   const [showScores, setShowScores] = useState(false);
 
-  const addHunter = () => {
-    if (hunters.length < 5) setHunters([...hunters, ""]);
-  };
+  const addHunter = () => setHunters([...hunters, ""]);
   const removeHunter = (i) => {
-    if (hunters.length > 3) setHunters(hunters.filter((_, idx) => idx !== i));
+    if (hunters.length > 1) setHunters(hunters.filter((_, idx) => idx !== i));
   };
   const updateHunter = (i, v) => {
     const h = [...hunters];
@@ -106,7 +104,7 @@ export default function EasterBettingPool() {
   };
 
   const validHunters = hunters.filter((h) => h.trim());
-  const canStartBetting = validHunters.length >= 3 && Number(buyIn) > 0;
+  const canStartBetting = validHunters.length >= 2 && Number(buyIn) > 0;
 
   const submitBet = () => {
     if (
@@ -131,7 +129,7 @@ export default function EasterBettingPool() {
 
   const resetApp = () => {
     setPhase(PHASES.SETUP);
-    setHunters(["", "", ""]);
+    setHunters(["", ""]);
     setBuyIn("");
     setBettors([]);
     setCurrentBet({ name: "", firstDuck: "", firstEgg: "", winner: "", winningCount: "", losingCount: "" });
@@ -339,8 +337,25 @@ export default function EasterBettingPool() {
         </div>
         {infoBar}
         <div style={cardStyle}>
+          <p style={{ ...labelStyle, fontSize: "1.05rem", marginBottom: 12 }}><span role="img">🎯</span> Betting Categories &amp; Scoring</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { emoji: "🦆", label: "First Duck Color Found", pts: `${BASE_PTS} pts` },
+              { emoji: "🥚", label: "First Egg Color Found", pts: `${Math.min(...Object.values(EGG_POINTS))}–${Math.max(...Object.values(EGG_POINTS))} pts (rarer = more)` },
+              { emoji: "🏆", label: "Hunter with Most Eggs", pts: `${BASE_PTS} pts` },
+              { emoji: "📈", label: "Winning Egg Count", pts: `${BASE_PTS} pts exact · 1 pt within ±2` },
+              { emoji: "📉", label: "Losing Egg Count", pts: `${BASE_PTS} pts exact · 1 pt within ±2` },
+            ].map(({ emoji, label, pts }) => (
+              <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 10px", background: "rgba(255,255,255,0.4)", borderRadius: 10 }}>
+                <span style={{ fontSize: "0.88rem", color: "#2d3436" }}><span role="img">{emoji}</span> {label}</span>
+                <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#6c5ce7", whiteSpace: "nowrap", marginLeft: 8 }}>{pts}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={cardStyle}>
           <p style={{ ...labelStyle, fontSize: "1.05rem", marginBottom: 14 }}>
-            <span role="img">🏃</span> Egg Hunters ({hunters.length}/5)
+            <span role="img">🏃</span> Egg Hunters ({hunters.length})
           </p>
           {hunters.map((h, i) => (
             <div key={i} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
@@ -353,22 +368,18 @@ export default function EasterBettingPool() {
                 value={h}
                 onChange={(e) => updateHunter(i, e.target.value)}
               />
-              {hunters.length > 3 && (
-                <button
-                  onClick={() => removeHunter(i)}
-                  style={{ background: "none", border: "none", color: "#d63031", cursor: "pointer", fontSize: "1.2rem", fontWeight: 700, padding: "4px 8px" }}
-                >
-                  ×
-                </button>
-              )}
+              <button
+                onClick={() => removeHunter(i)}
+                style={{ background: "none", border: "none", color: "#d63031", cursor: "pointer", fontSize: "1.2rem", fontWeight: 700, padding: "4px 8px", opacity: hunters.length > 1 ? 1 : 0.3 }}
+              >
+                ×
+              </button>
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
-            {hunters.length < 5 && (
-              <button onClick={addHunter} style={{ ...primaryBtn, background: "rgba(108,92,231,0.12)", color: "#6c5ce7", boxShadow: "none", fontSize: "0.9rem", padding: "8px 20px" }}>
-                + Add Hunter
-              </button>
-            )}
+            <button onClick={addHunter} style={{ ...primaryBtn, background: "rgba(108,92,231,0.12)", color: "#6c5ce7", boxShadow: "none", fontSize: "0.9rem", padding: "8px 20px" }}>
+              + Add Hunter
+            </button>
           </div>
           <div style={{ marginTop: 20, borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 18 }}>
             <p style={{ ...labelStyle, fontSize: "1.05rem", marginBottom: 10 }}>
@@ -532,11 +543,15 @@ export default function EasterBettingPool() {
                 }}
               >
                 <span style={{ fontWeight: 600 }}>{b.name}</span>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end", alignItems: "center" }}>
                   <span style={{ fontSize: "0.75rem", background: COLOR_MAP[b.firstDuck].bg, color: COLOR_MAP[b.firstDuck].text, padding: "2px 8px", borderRadius: 99 }}>{b.firstDuck}</span>
                   <span style={{ fontSize: "0.75rem", background: COLOR_MAP[b.firstEgg].bg, color: COLOR_MAP[b.firstEgg].text, padding: "2px 8px", borderRadius: 99 }}>{b.firstEgg}</span>
                   <span style={{ fontSize: "0.75rem", background: "#dfe6e9", padding: "2px 8px", borderRadius: 99 }}>{b.winner}</span>
                   <span style={{ fontSize: "0.75rem", background: "#dfe6e9", padding: "2px 8px", borderRadius: 99 }}>W:{b.winningCount} L:{b.losingCount}</span>
+                  <button
+                    onClick={() => setBettors(bettors.filter((_, idx) => idx !== i))}
+                    style={{ background: "none", border: "none", color: "#d63031", cursor: "pointer", fontSize: "1.2rem", fontWeight: 700, padding: "2px 6px", lineHeight: 1 }}
+                  >×</button>
                 </div>
               </div>
             ))}
